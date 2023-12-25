@@ -9,14 +9,6 @@ import Mentor from "@/app/components/Mentor";
 import Mentee from "@/app/components/Mentee";
 import React from "react";
 
-// colors
-// primary: #feec01
-// text color: #191817
-// secondary: #fefffe
-
-// fonts
-// primary font: TT Trailers bold
-// secondary font: Sailec regular
 
 export default function Home() {
   return (
