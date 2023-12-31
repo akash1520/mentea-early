@@ -1,10 +1,20 @@
 export interface UserData {
   firstName: string;
   lastName: string;
+  shortHeading?: string;
+  experience?: string;
+  about?: string;
   username: string;
   age?: string;
+  mentorId?: string;
+  sessionId?: string;
   gender?: string;
   role?: string;
+  profileImgUrl?: string;
+  socials?: string[];
+  mobile?: string;
+  organization?: string;
+  languages?: string[];
 }
 
 export interface signupUser {

@@ -1,16 +1,36 @@
-// import { useAuthStore } from "@/store/AuthStore";
-import React from "react";
+"use client"
+import React, { useEffect } from "react";
 import { getAvatarInitials } from "./utils";
 import MobileNavbarMenuItem from "./MobileNavbarMenuItem";
 import { mobileNavbarMenuItems } from "./constants/mobileNavbarMenuItems";
 import Link from "next/link";
+import { useAuthStore } from "@/store/AuthStore";
 
 interface MobileNavbarProps {
   handleMobileMenuToggle: () => void;
 }
 
 const MobileNavbar = ({ handleMobileMenuToggle }: MobileNavbarProps) => {
-  const [user, userData, logout] = [{displayName: "Akash Parmar"}, {username: "akashhuyaar", firstName: "Akash", lastName: "Parmar"}, () => {}];	
+  const [user, getCurrentUser, userData, logout] = useAuthStore((state) => [
+    state.user,
+    state.getCurrentUser,
+    state.userData,
+    state.logout,
+  ]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        await getCurrentUser();
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    if (!user || !userData) {
+      fetchUser();
+    }
+  }, [user, userData, getCurrentUser]);
 
   return (
     <>

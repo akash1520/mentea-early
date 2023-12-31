@@ -7,6 +7,7 @@ import PersonIcon from "@mui/icons-material/Person";
 // import { useAuthStore } from "@/store/AuthStore";
 import { getAvatarInitials } from "./utils";
 import Link from "next/link";
+import { useAuthStore } from "@/store/AuthStore";
 
 const NavbarMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -25,7 +26,7 @@ const NavbarMenu = () => {
   //   state.logout,
   // ]);
 
-  const [user, userData, logout] = [{displayName:"Akash Parmar"},{username:"akashhuyaar",role:"user"},()=>{}]
+  const {user, userData, logout} = useAuthStore((state)=>state)
 
 
   const handleLogout = () => {
@@ -63,9 +64,9 @@ const NavbarMenu = () => {
       >
         <Link
           href={
-            userData?.role === "user"
-              ? `/u/${userData?.username}`
-              : `/mentor/${userData?.username}`
+            userData?.mentorId != ""
+              ? `/mentor/${userData?.mentorId}`
+              : `/u/${user?.uid}`
           }
         >
           <MenuItem>

@@ -2,7 +2,7 @@ import React from "react";
 import SessionCard from "./sessions/SessionCard";
 
 
-const MentorViewRightPanel = ({ mentorId }: { mentorId: string }) => {
+const UserViewRightPanel = ({ mentorId }: { mentorId: string }) => {
   const sessions = [{
     title: "placeholder_title", // Replace with actual title
     price: 120,
@@ -35,4 +35,4 @@ const MentorViewRightPanel = ({ mentorId }: { mentorId: string }) => {
   );
 };
 
-export default MentorViewRightPanel;
+export default UserViewRightPanel;

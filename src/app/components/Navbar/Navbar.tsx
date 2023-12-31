@@ -8,38 +8,38 @@ import NavbarMenu from "./NavbarMenu";
 import { CircularProgress } from "@mui/material";
 import Link from "next/link";
 import MobileNavbar from "./MobileNavbar";
+import { useAuthStore } from "@/store/AuthStore";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // const [user, getCurrentUser, isLoading, userData, getCurrentUserData] = useAuthStore((state) => [
-  //   state.user,
-  //   state.getCurrentUser,
-  //   state.isLoading,
-  //   state.userData,
-  //   state.getCurrentUserData,
-  // ]);
+  const [user, getCurrentUser, isLoading, userData, getCurrentUserData] = useAuthStore((state) => [
+    state.user,
+    state.getCurrentUser,
+    state.isLoading,
+    state.userData,
+    state.getCurrentUserData,
+  ]);
 
-  const [user, getCurrentUser, isLoading, userData, getCurrentUserData] = [{},()=>{},false,{},()=>{}]
 
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       await getCurrentUser();
-  //     } catch (error) {
-  //       console.error("Error fetching user:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        await getCurrentUser();
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
 
-  //   if (!user || !userData) {
-  //     fetchUser();
-  //   }
-  // }, [user, userData, getCurrentUser]);
+    if (!user || !userData) {
+      fetchUser();
+    }
+  }, [user, userData, getCurrentUser]);
 
   return (
     <nav className="bg-[#feec01] h-[78px]">

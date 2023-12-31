@@ -95,7 +95,6 @@ export const useAuthStore = create<AuthStore>()((set, get) => ({
 
           if (user) {
             set({ user: user });
-
             get().getCurrentUserData();
           } else {
             set({ user: null });
@@ -112,6 +111,10 @@ export const useAuthStore = create<AuthStore>()((set, get) => ({
     }
   },
   getCurrentUserData: async () => {
+    if(get().userData) return;
+
+    if(!(get().user)) get().getCurrentUser()
+
     // get the current user id
     const uid = get().user?.uid;
 
@@ -123,17 +126,10 @@ export const useAuthStore = create<AuthStore>()((set, get) => ({
       // If the logged in user is a user, then fetch its data
       if (docSnap.exists()) {
         const data = docSnap.data() as UserData;
-        set(() => ({ userData: { ...data, role: "user" } }));
-        return;
-      }
-
-      const mentorRef = doc(db, "Mentors", uid);
-      const mentorSnap = await getDoc(mentorRef);
-
-      // If the logged in user is a mentor, then fetch its data
-      if (mentorSnap.exists()) {
-        const data = mentorSnap.data() as UserData;
-        set(() => ({ userData: { ...data, role: "mentor" } }));
+        if(data.mentorId!==null) {
+          set(() => ({ userData: { ...data, role: "user"} }));
+        }
+        else set(() => ({ userData: { ...data, role: "mentor"} }));
         return;
       }
 

@@ -1,32 +1,19 @@
 "use client"
-import { useState, useEffect } from 'react';
-import { db } from '@/firebase';
-import { FirestoreError, collection, getDocs } from 'firebase/firestore';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { FirestoreError} from 'firebase/firestore';
 import { Balancer } from 'react-wrap-balancer';
 import MentorCard from './components/MentorCard';
-import { Mentor } from '@/types/mentor';
+import { MentorsData } from '@/types/mentor';
+import { fetchMentors } from '../utils/fetchMentors';
+
 
 const MentorsPage = () => {
-  const [mentors, setMentors] = useState<Mentor[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | undefined>(undefined);
+  const [mentors, setMentors] = useState<MentorsData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<FirestoreError>();
 
   useEffect(() => {
-    const fetchMentors = async () => {
-      try {
-        const mentorsCollectionRef = collection(db, 'Mentors');
-        const querySnapshot = await getDocs(mentorsCollectionRef);
-
-        const mentorsData = querySnapshot.docs.map((doc) => doc.data());
-        setMentors(mentorsData as Mentor[]);
-      } catch (err) {
-        setError(err as FirestoreError);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMentors();
+    fetchMentors(setMentors, setError as  Dispatch<SetStateAction<FirestoreError>>, setIsLoading);
   }, []);
 
   if (isLoading) {
@@ -53,7 +40,7 @@ const MentorsPage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center max-w-5xl mx-auto">
           {mentors.map((mentor, index) => (
-            <MentorCard mentor={mentor} key={index} />
+            <MentorCard uid={mentor.uid} mentor={mentor} key={index} />
           ))}
         </div>
       </div>

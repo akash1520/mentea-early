@@ -1,23 +1,4 @@
-export interface Mentor {
-  firstName: string;
-  lastName: string;
-  username: string;
-  profileImgUrl: string;
-  shortHeading: string;
-  gender: string;
-  age: string;
-  about?: string;
-  organization: string;
-  role: string;
-  experience: number;
-  languages: string[];
-  socials: string[];
-}
-
-export interface MentorWithId extends Mentor {
-  readonly id: string;
-}
-
+import { UserData } from "./user";
 export interface Slot {
   id: string; // Unique identifier for each slot
   startTime: Date;
@@ -29,3 +10,6 @@ export interface Slot {
 }
 
 
+export interface MentorsData extends UserData{
+  uid:string; //
+}

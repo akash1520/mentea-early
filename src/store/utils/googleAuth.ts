@@ -1,13 +1,11 @@
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import { FirebaseError } from "firebase/app";
-import create from "zustand"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useAuthStore } from "../AuthStore";
+import {  getName } from "../../utils/utils";
+import { doc, setDoc } from "firebase/firestore";
 
-
-
-export async function googleAuth(set:any, googleProvider:GoogleAuthProvider) {
-    try {
+export async function googleAuth(set: any, googleProvider: GoogleAuthProvider) {
+  try {
     set(() => ({ isLoading: true }));
 
     // Google login using Firebase Auth
@@ -15,6 +13,30 @@ export async function googleAuth(set:any, googleProvider:GoogleAuthProvider) {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential?.accessToken;
     const user = result.user;
+    const { displayName, email, photoURL, phoneNumber } = user;
+    const [firstName, lastName] = getName(displayName as string);
+    const userData = {
+      age: "",
+      firstName: firstName || "",
+      lastName: lastName || "",
+      gender: "",
+      email: email || "",
+      languages: [],
+      mentorId: "",
+      mobile: phoneNumber || "",
+      organization: "",
+      profileImgUrl: photoURL || "",
+      role: "user",
+      shortHeading: "",
+      socials: [],
+      username: "",
+    };
+
+    const userRef = doc(db, "Users", user.uid);
+    set(() => ({ userData: userData }));
+    await setDoc(userRef, {...userData});
+    
+
     set(() => ({ user: user, token: token }));
     return true; // Indicate successful login
   } catch (error) {
@@ -29,4 +51,5 @@ export async function googleAuth(set:any, googleProvider:GoogleAuthProvider) {
     return false;
   } finally {
     set(() => ({ isLoading: false }));
-  }}
+  }
+}
